@@ -50,7 +50,7 @@
                             <div class="col-md-12">
                                 <form class="search-box">
                                     <div class="input-group">
-                                        <input name="query" type="text" class="form-control input-lg" placeholder="Search for...">
+                                        <input name="query" type="text" class="form-control input-lg" placeholder="Search for..." autofocus>
                                         <span class="input-group-btn">
                                             <button class="btn btn-default btn-lg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
                                         </span>
@@ -59,6 +59,39 @@
                             </div><!-- /.col-lg-6 -->
                         </div><!-- /.row -->
                     </div>
+                    @if(isset($results) and $results->count() > 0)
+                        <table class="table">
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Color</th>
+                                <th>Material</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                            </tr>
+                            @foreach($results as $item)
+                                <tr>
+                                    <td>{{ $item->code }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->color }}</td>
+                                    <td>{{ $item->material }}</td>
+                                    <td>{{ $item->description }}</td>
+                                    <td>
+                                        @if($item instanceof App\Desk)
+                                            Desk
+                                        @elseif($item instanceof App\Chair)
+                                            Chair
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+
+                        {{ $results->appends(['query' => Request::get('query')])->links() }}
+                    @endif
+                    @if(isset($results) and $results->count() == 0)
+                        <p class="lead">Nothing found!</p>
+                    @endif
                 </div>
             </div>
         </div>
